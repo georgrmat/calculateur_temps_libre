@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Calculateur de Temps Libre Restant</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculateur de Temps Libre Restant</h1>
+        <form id="timeForm">
+            <label for="birthdate">Date de Naissance</label>
+            <input type="date" id="birthdate" required>
+
+            <label for="sleepHours">Heures de Sommeil</label>
+            <input type="number" id="sleepHours" required>
+
+            <label for="workHours">Heures de Travail</label>
+            <input type="number" id="workHours" required>
+
+            <label for="mealHours">Heures de Repas</label>
+            <input type="number" id="mealHours" required>
+
+            <label for="miscHours">Heures d'Activités Diverses</label>
+            <input type="number" id="miscHours" required>
+
+            <label for="lifeExpectancy">Espérance de Vie Attendue</label>
+            <input type="number" id="lifeExpectancy" required>
+
+            <button type="button" onclick="calculateTime()">Calculer</button>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
