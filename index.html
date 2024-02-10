@@ -8,7 +8,16 @@
 </head>
 <body>
     <div class="container">
-        <h1>Calculateur de Temps Libre Restant</h1>
+        <div id="languageSelection">
+            <label for="checkboxEnglish">English</label>
+            <input type="checkbox" id="checkboxEnglish" onchange="updateLanguage('en')">
+
+            <label for="checkboxFrench">Français</label>
+            <input type="checkbox" id="checkboxFrench" onchange="updateLanguage('fr')">
+            
+        </div>
+
+        <h1 id="pageTitle">Calculateur de Temps Libre Restant</h1>
         <form id="timeForm">
             <label for="birthdate">Date de naissance</label>
             <input type="date" id="birthdate" required>
@@ -25,15 +34,98 @@
             <label for="miscHours">Heures d'activités diverses par jour</label>
             <input type="number" id="miscHours" required>
 
-            <label for="lifeExpectancy">Espérance de vie attendue par jour</label>
+            <label for="lifeExpectancy">Espérance de vie attendue</label>
             <input type="number" id="lifeExpectancy" required>
 
-            <button type="button" onclick="calculateTime()">Calculer</button>
+            <button type="button" id="calculateButton" onclick="calculateTime()">Calculer</button>
         </form>
 
         <div id="result"></div>
     </div>
 
-    <script src="script.js"></script>
+    
+    <script>
+        // Récupérer la langue préférée de l'utilisateur depuis localStorage
+        const userLanguage = localStorage.getItem('language') || 'en';
+
+        // Définir la langue en fonction de la préférence de l'utilisateur
+        document.documentElement.lang = userLanguage;
+        updateLanguage(userLanguage);
+
+        // Mettre à jour les cases à cocher en fonction de la langue sélectionnée
+        document.getElementById('checkboxEnglish').checked = userLanguage === 'en';
+        document.getElementById('checkboxFrench').checked = userLanguage === 'fr';
+        
+        // Fonction pour mettre à jour la langue
+        function updateLanguage(language) {
+            document.documentElement.lang = language;
+
+            // Mettre à jour les cases à cocher en fonction de la langue sélectionnée
+            document.getElementById('checkboxEnglish').checked = language === 'en';
+            document.getElementById('checkboxFrench').checked = language === 'fr';
+            
+            // Mettre à jour le contenu spécifique à la langue
+            if (language === 'fr') {
+                document.getElementById('pageTitle').innerText = "Calculateur de Temps Libre Restant";
+                document.getElementById('birthdate').labels[0].innerText = "Date de naissance";
+                document.getElementById('sleepHours').labels[0].innerText = "Heures de sommeil par jour";
+                document.getElementById('workHours').labels[0].innerText = "Heures de travail par jour";
+                document.getElementById('mealHours').labels[0].innerText = "Heures de repas par jour";
+                document.getElementById('miscHours').labels[0].innerText = "Heures d'activités diverses par jour";
+                document.getElementById('lifeExpectancy').labels[0].innerText = "Espérance de vie attendue (Années)";
+                document.getElementById('calculateButton').innerText = "Calculer";
+            } else {
+                document.getElementById('pageTitle').innerText = "Remaining Free Time Calculator";
+                document.getElementById('birthdate').labels[0].innerText = "Date of Birth";
+                document.getElementById('sleepHours').labels[0].innerText = "Sleep Hours per Day";
+                document.getElementById('workHours').labels[0].innerText = "Work Hours per Day";
+                document.getElementById('mealHours').labels[0].innerText = "Meal Hours per Day";
+                document.getElementById('miscHours').labels[0].innerText = "Other Activity Hours per Day";
+                document.getElementById('lifeExpectancy').labels[0].innerText = "Expected Life Expectancy (Years)";
+                document.getElementById('calculateButton').innerText = "Calculate";
+            }
+        }
+
+        function getFormattedResultText() {
+            const positiveRemainingHours = Math.max(remainingHours, 0);
+
+            if (document.documentElement.lang === 'fr') {
+                resultContainer.innerText = `${positiveRemainingHours.toFixed(2)} heures restantes ou ${(positiveRemainingHours / 24).toFixed(2)} jours restants`;
+            } else {
+                resultContainer.innerText = `${positiveRemainingHours.toFixed(2)} hours remaining or ${(positiveRemainingHours / 24).toFixed(2)} days remaining`;
+            }
+        }
+
+        function calculateTime() {
+
+            // Update the content again based on the current language
+            updateLanguage(document.documentElement.lang);
+            // Récupérer les valeurs des champs du formulaire
+            const birthdate = new Date(document.getElementById('birthdate').value);
+            const sleepHours = parseFloat(document.getElementById('sleepHours').value);
+            const workHours = parseFloat(document.getElementById('workHours').value);
+            const mealHours = parseFloat(document.getElementById('mealHours').value);
+            const miscHours = parseFloat(document.getElementById('miscHours').value);
+            const lifeExpectancy = parseFloat(document.getElementById('lifeExpectancy').value);
+
+            // Calculer le temps restant en heures
+            const today = new Date();
+            const remainingYears = lifeExpectancy - (today - birthdate) / (1000 * 60 * 60 * 24 * 365.25);
+            const remainingHours = remainingYears * 365.25 * (24 - sleepHours - workHours - mealHours - miscHours);
+
+            // Display the initial result in the current language
+            const resultContainer = document.getElementById('result');
+            const positiveRemainingHours = Math.max(remainingHours, 0);
+
+            
+            if (document.documentElement.lang === 'fr') {
+                resultContainer.innerText = `${positiveRemainingHours.toFixed(2)} heures restantes ou ${(positiveRemainingHours / 24).toFixed(2)} jours restants`;
+            } else {
+                resultContainer.innerText = `${positiveRemainingHours.toFixed(2)} hours remaining or ${(positiveRemainingHours / 24).toFixed(2)} days remaining`;
+            }
+            
+        }
+
+    </script>
 </body>
 </html>
